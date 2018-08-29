@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="igniteInstanceName" value="ignite-server-3"/>
+        <property name="peerClassLoadingEnabled" value="true"/>
+        <property name="timeServerPortBase" value="31101"/>
+        <property name="timeServerPortRange" value="5"/>
+
+        <property name="communicationSpi">
+            <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+                <property name="localAddress" value="127.0.0.1"/>
+                <property name="localPort" value="47101"/>
+                <property name="localPortRange" value="5"/>
+            </bean>
+        </property>
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="localAddress" value="127.0.0.1"/>
+                <property name="localPort" value="47501"/>
+                <property name="localPortRange" value="5"/>
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="shared" value="true"/>
+                        <property name="addresses">
+                            <list>
+                                <value>127.0.0.1:47501..47506</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <property name="atomicConfiguration">
+            <bean class="org.apache.ignite.configuration.AtomicConfiguration">
+                <property name="atomicSequenceReserveSize" value="1000"/>
+                <property name="cacheMode" value="PARTITIONED"/>
+                <property name="backups" value="1"/>
+            </bean>
+        </property>
+
+        <property name="cacheConfiguration">
+            <list>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="persons"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+                    <property name="backups" value="1"/>
+                    <property name="atomicityMode" value="TRANSACTIONAL"/>
+                    <property name="partitionLossPolicy" value="READ_WRITE_SAFE"/>
+                    <property name="writeSynchronizationMode" value="PRIMARY_SYNC"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>
