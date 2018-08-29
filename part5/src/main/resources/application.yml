@@ -1,0 +1,10 @@
+database:
+  local_node:
+    name: "ignite-client"
+    host: "127.0.0.1"
+    port: 47500
+  remote_nodes:
+    - host: "127.0.0.1"
+      port: 47501
+    - host: "127.0.0.1"
+      port: 47502
